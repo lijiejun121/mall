@@ -1,4 +1,4 @@
-import Request from '@js_sdk/luch-request/request.js'
+import Request from '@/js_sdk/luch-request/request.js'
 import { API_BASE_URL } from '@/utils/appConfig.js';
 
 const http = new Request();

@@ -1,4 +1,4 @@
-import request from '@utils/requestUtil'
+import request from '@/utils/requestUtil'
 
 export function fetchAddressList() {
 	return request({
