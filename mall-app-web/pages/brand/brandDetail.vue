@@ -62,18 +62,19 @@
 			share
 		},
 		data() {
-			loaded: false,
-			brand: {},
-			productList: [],
-			loadingType: 'more',
-			favoriteStatus: false,
-			queryParam: {
-				brandId: null,
-				pageNum: 1,
-				pageSize: 4
-			}
-		};
-	},
+			return {
+				loaded: false,
+				brand: {},
+				productList:[],
+				loadingType: 'more',
+				favoriteStatus:false,
+				queryParam: {
+					brandId: null,
+					pageNum: 1,
+					pageSize: 4
+				}
+			};
+		},
 	onLoad(options) {
 		this.loaded = true;
 		let id = options.id;
@@ -85,7 +86,7 @@
 		this.loadData('refresh');
 	},
 	computed: {
-		...mapState(['hasLogin']);
+		...mapState(['hasLogin'])
 	},
 	methods: {
 		imageOnLoad(key, index) {
@@ -209,6 +210,7 @@
 			}
 		},
 	}
+	}
 </script>
 
 <style lang="scss">
@@ -257,7 +259,7 @@
 			font-size: $font-lg + 4upx;
 			margin-left: 30upx;
 			color: $font-color-dark;
-			text: last-child {
+			text:last-child {
 				font-size: $font-sm;
 				color: $font-color-light;
 				margin-top: 8upx;
