@@ -145,7 +145,7 @@
 
 <style>
 	.uni-numbox {
-		position: absolute,
+		position: absolute;
 		left: 30upx;
 		bottom: 0;
 		display: flex;
