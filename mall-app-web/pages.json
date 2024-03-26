@@ -245,19 +245,39 @@
 			}
 		},
 		{
-			"path" : "pages/address/address",
-			"style" : 
-			{
-				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+			"path": "pages/user/productCollection",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "我的收藏",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "清空",
+							"fontSize": "16",
+							"color": "#303133",
+							"width": "46upx",
+							"background": "rgba(0,0,0,0)"
+						}]
+					}
+				}
 			}
 		},
 		{
-			"path" : "pages/category/category/category",
-			"style" : 
-			{
-				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+			"path": "pages/user/brandAttention",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "我的关注",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text": "清空",
+								"fontSize": "16",
+								"color": "#303133",
+								"width": "46px",
+								"background": "rgba(0,0,0,0)"
+						}]
+					}
+				}
 			}
 		}
 	],

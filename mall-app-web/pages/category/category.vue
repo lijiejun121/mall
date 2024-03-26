@@ -60,7 +60,7 @@
 <style lang='scss'>
 	page,
 	.content {
-		height: 100%,
+		height: 100%;
 		background-color: #f8f8f8;
 	}
 	
