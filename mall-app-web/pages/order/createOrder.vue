@@ -127,165 +127,167 @@
 		formatDate
 	} from '@/utils/date';
 	export default {
-		return {
-			maskState: 0,
-			desc: '',
-			payType: 1,
-			couponList: [],
-			memberReceiveAddressList: [],
-			currentAddress: {},
-			cartPromotionItemList: [],
-			calcAmount: {},
-			currCoupon: null,
-			useIntegration: 0,
-			integrationConsumeSetting: {},
-			memberIntegration: 0,
-			cartIds: []
-		}
-	},
-	onLoad(option) {
-		this.cartIds = JSON.parse(option.cartIds);
-		console.log(this.cartIds);
-		this.loadData();
-	},
-	filters: {
-		formatProductAttr(jsonAttr) {
-			let attrArr = JSON.parse(jsonAttr);
-			let attrStr = '';
-			for (let attr of attrArr) {
-				attrStr += attr.key;
-				attrStr += ":";
-				attrStr += attr.value;
-				attrStr += ";";
+		data() {
+			return {
+				maskState: 0,
+				desc: '',
+				payType: 1,
+				couponList: [],
+				memberReceiveAddressList: [],
+				currentAddress: {},
+				cartPromotionItemList: [],
+				calcAmount: {},
+				currCoupon: null,
+				useIntegration: 0,
+				integrationConsumeSetting: {},
+				memberIntegration: 0,
+				cartIds: []
 			}
-			return attrStr;
 		},
-		formatDateTime(time) {
-			if (time == null || time === '') {
-				return 'N/A';
-			}
-			let date = new Date(time);
-			return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
+		onLoad(option) {
+			this.cartIds = JSON.parse(option.cartIds);
+			console.log(this.cartIds);
+			this.loadData();
 		},
-		formatCouponUseType(useType) {
-			if (useType == 0) {
-				return "全场通用";
-			} else if (useType == 1) {
-				return "指定分类商品可用";
-			} else if (useType == 2) {
-				return "指定商品可用";
-			}
-			return null;
-		},
-	},
-	methods: {
-		async loadData() {
-			generateConfirmOrder(JSON.stringify(this.cartIds)).then(response => {
-				this.memberReceiveAddressList = response.data.memberReceiveAddressList;
-				this.currentAddress = this.getDefaultAddress();
-				this.cartPromotionItemList = response.data.cartPromotionItemList;
-				this.couponList = [];
-				for (let item of response.data.couponHistoryDetailList) {
-					this.couponList.push(item.coupon);
+		filters: {
+			formatProductAttr(jsonAttr) {
+				let attrArr = JSON.parse(jsonAttr);
+				let attrStr = '';
+				for (let attr of attrArr) {
+					attrStr += attr.key;
+					attrStr += ":";
+					attrStr += attr.value;
+					attrStr += ";";
 				}
-				this.calcAmount = response.data.calcAmount;
-				this.integrationConsumeSetting = response.data.integrationConsumeSetting;
-				this.memberIntegration = response.data.memberIntegration;
-			});
+				return attrStr;
+			},
+			formatDateTime(time) {
+				if (time == null || time === '') {
+					return 'N/A';
+				}
+				let date = new Date(time);
+				return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
+			},
+			formatCouponUseType(useType) {
+				if (useType == 0) {
+					return "全场通用";
+				} else if (useType == 1) {
+					return "指定分类商品可用";
+				} else if (useType == 2) {
+					return "指定商品可用";
+				}
+				return null;
+			},
 		},
-		toggleMask(type) {
-			let timer = type === 'show' ? 10 : 300;
-			let state = type === 'show' ? 1 : 0;
-			this.maskState = 2;
-			setTimeout(() => {
-				this.maskState = state;
-			}, timer);
-		},
-		numberChange(data) {
-			this.number = data.number;
-		},
-		changePayType(type) {
-			this.payType = type;
-		},
-		submit() {
-			let orderParam = {
-				payType: 0,
-				couponId: null,
-				cardIds: this.cartIds,
-				memberReceiveAddressList: this.currentAddress.id,
-				useIntegration: this.useIntegration
-			}
-			if (this.currCoupon != null) {
-				orderParam.couponId = this.currCoupon.id;
-			}
-			generateOrder(orderParam).then(response => {
-				let orderId = response.data.order.id;
-				uni.showModal({
-					title: '提示',
-					content: '订单创建成功，是否要立即支付？',
-					confirmText: '去支付',
-					cancelText: '取消',
-					success: function(res) {
-						if (res.confirm) {
-							uni.redirectTo({
-								url: `/pages/money/pay?orderId=${orderId}`
-							})
-						} else if (res.cancel) {
-							console.log("cancel")
-							uni.redirectTo({
-								url: '/pages/order/order?state=0'
-							})
-						}
+		methods: {
+			async loadData() {
+				generateConfirmOrder(JSON.stringify(this.cartIds)).then(response => {
+					this.memberReceiveAddressList = response.data.memberReceiveAddressList;
+					this.currentAddress = this.getDefaultAddress();
+					this.cartPromotionItemList = response.data.cartPromotionItemList;
+					this.couponList = [];
+					for (let item of response.data.couponHistoryDetailList) {
+						this.couponList.push(item.coupon);
 					}
+					this.calcAmount = response.data.calcAmount;
+					this.integrationConsumeSetting = response.data.integrationConsumeSetting;
+					this.memberIntegration = response.data.memberIntegration;
 				});
-			});
-		},
-		stopPrevent() {},
-		
-		getDefaultAddress() {
-			for (let item of this.memberReceiveAddressList) {
-				if (item.defaultState == 1) {
-					return item;
+			},
+			toggleMask(type) {
+				let timer = type === 'show' ? 10 : 300;
+				let state = type === 'show' ? 1 : 0;
+				this.maskState = 2;
+				setTimeout(() => {
+					this.maskState = state;
+				}, timer);
+			},
+			numberChange(data) {
+				this.number = data.number;
+			},
+			changePayType(type) {
+				this.payType = type;
+			},
+			submit() {
+				let orderParam = {
+					payType: 0,
+					couponId: null,
+					cardIds: this.cartIds,
+					memberReceiveAddressList: this.currentAddress.id,
+					useIntegration: this.useIntegration
 				}
-			}
-			if (item.memberReceiveAddressList != null && this.memberReceiveAddressList.length > 0) {
-				return this.memberReceiveAddressList[0];
-			}
-			return {};
-		},
-		selectCoupon(coupon) {
-			this.currCoupon = coupon;
-			this.calcPayAmount();
-			this.toggleMask();
-		},
-		calcPayAmount() {
-			this.calcAmount.payAmount = this.calcAmount.totalAmount - this.calcPayAmount.promotionAmount - this.calcAmount.freightAmount;
-			if (this.currCoupon != null) {
-				this.calcAmount.payAmount = this.calcAmount.payAmount - this.currCoupon.amount;
-			}
-			if (this.useIntegration != 0) {
-				this.calcAmount.payAmount = this.calcAmount.payAmount - this.calcIntegrationAmount();
-			}
-		},
-		
-		calcIntegrationAmount(integration) {
-			if (this.integrationConsumeSetting == undefined || this.integrationConsumeSetting == null) {
-				return 0;
-			}
-			if (this.integrationConsumeSetting.couponStatus == 0) {
-				return 0;
-			}
-			return integration / this.integrationConsumeSetting.deductionPerAmount;
-		},
-		handleIntegrationInput(event) {
-			if (event.detail.value > this.memberIntegration) {
-				this.useIntegration = this.memberIntegration;
-				uni.showToast({
-					title: `您的积分只有${this.memberIntegration}`,
-					duration: 1000
-				})
-			}
-		},
+				if (this.currCoupon != null) {
+					orderParam.couponId = this.currCoupon.id;
+				}
+				generateOrder(orderParam).then(response => {
+					let orderId = response.data.order.id;
+					uni.showModal({
+						title: '提示',
+						content: '订单创建成功，是否要立即支付？',
+						confirmText: '去支付',
+						cancelText: '取消',
+						success: function(res) {
+							if (res.confirm) {
+								uni.redirectTo({
+									url: `/pages/money/pay?orderId=${orderId}`
+								})
+							} else if (res.cancel) {
+								console.log("cancel")
+								uni.redirectTo({
+									url: '/pages/order/order?state=0'
+								})
+							}
+						}
+					});
+				});
+			},
+			stopPrevent() {},
+			
+			getDefaultAddress() {
+				for (let item of this.memberReceiveAddressList) {
+					if (item.defaultState == 1) {
+						return item;
+					}
+				}
+				if (item.memberReceiveAddressList != null && this.memberReceiveAddressList.length > 0) {
+					return this.memberReceiveAddressList[0];
+				}
+				return {};
+			},
+			selectCoupon(coupon) {
+				this.currCoupon = coupon;
+				this.calcPayAmount();
+				this.toggleMask();
+			},
+			calcPayAmount() {
+				this.calcAmount.payAmount = this.calcAmount.totalAmount - this.calcPayAmount.promotionAmount - this.calcAmount.freightAmount;
+				if (this.currCoupon != null) {
+					this.calcAmount.payAmount = this.calcAmount.payAmount - this.currCoupon.amount;
+				}
+				if (this.useIntegration != 0) {
+					this.calcAmount.payAmount = this.calcAmount.payAmount - this.calcIntegrationAmount();
+				}
+			},
+			
+			calcIntegrationAmount(integration) {
+				if (this.integrationConsumeSetting == undefined || this.integrationConsumeSetting == null) {
+					return 0;
+				}
+				if (this.integrationConsumeSetting.couponStatus == 0) {
+					return 0;
+				}
+				return integration / this.integrationConsumeSetting.deductionPerAmount;
+			},
+			handleIntegrationInput(event) {
+				if (event.detail.value > this.memberIntegration) {
+					this.useIntegration = this.memberIntegration;
+					uni.showToast({
+						title: `您的积分只有${this.memberIntegration}`,
+						duration: 1000
+					})
+				}
+			},
+		}
 	}
 </script>
 

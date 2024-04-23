@@ -279,14 +279,6 @@
 					}
 				}
 			}
-		},
-		{
-			"path" : "pages/order/createOrder/createOrder",
-			"style" : 
-			{
-				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
-			}
 		}
 	],
 	"globalStyle": {
